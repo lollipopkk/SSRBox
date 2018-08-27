@@ -1,0 +1,57 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>玛塔留言板</title>
+  <meta name="renderer" content="webkit">
+  <link href="https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.flat.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="am-container">
+<h1>玛塔留言板</h1>
+<form class="am-form" id="myform">
+<div class="am-form-group">
+      <textarea class="" rows="5" id="content"></textarea>
+</div>
+<p><button type="submit" class="am-btn am-btn-success">提交留言</button></p>
+<div id="msg"></div>
+</form>
+<div id="list"></div>
+</div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/amazeui/2.7.2/js/amazeui.min.js"></script>
+<script>
+$(function(){
+	var msg='<div class="am-alert am-alert-danger" data-am-alert>请填写留言内容</div>';
+	$('#myform').bind('submit',function(){
+		if($('#content').val()==''){
+			$('#msg').html(msg);
+		}
+		$.post('js_post.php',{'content':$('#content').val(),'rand':Math.random()},function(data){
+			$('#content').val('');
+			load_content();
+		});
+		return false;
+	});
+	
+	$('#content').bind('keyup',function(){
+		$('#msg').html('');
+	});
+	
+	function load_content(){
+		$.post('js_content.php',{'rand':Math.random()},function(data){
+			$('#list').html(data);
+		});
+	}
+	
+	load_content();
+	
+	setInterval(load_content,1000);
+	
+});
+</script>
+</body>
+</html>
